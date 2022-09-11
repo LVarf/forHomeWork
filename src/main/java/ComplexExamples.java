@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ComplexExamples {
@@ -104,7 +101,7 @@ public class ComplexExamples {
         for (Map.Entry<String, Integer> persons : task1().entrySet()) {
             System.out.println(
                     "Key: " + persons.getKey() + "\n"
-                    + "Value: " + persons.getValue()
+                            + "Value: " + persons.getValue()
             );
         }
         /*
@@ -124,7 +121,7 @@ public class ComplexExamples {
 
         //task2
         int[] array = new int[]{3, 4, 2, 7};
-        System.out.println(array);
+        System.out.println(Arrays.toString(Arrays.stream(task2(array, 10)).toArray()));
 
 
 
@@ -133,6 +130,8 @@ public class ComplexExamples {
 
             [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
          */
+
+        System.out.println(task3("cwheeel", "cartwheel"));
 
 
 
@@ -148,32 +147,50 @@ public class ComplexExamples {
          */
     }
 
-    /*
-        Task1
-            Убрать дубликаты, отсортировать по идентификатору, сгруппировать по имени
+    private static boolean task3(String str1, String str2) {
+        Stack<Character> chars = new Stack<>();
+        for (int i = 0; i < str1.length(); i++) {
+            chars.push(str1.charAt(i));
+        }
 
-            Что должно получиться
-                Key:Amelia
-                Value:4
-                Key: Emily
-                Value:1
-                Key: Harry
-                Value:3
-                Key: Jack
-                Value:1
-         */
+        int i = str2.length()-1;
+        while (!chars.empty() && i != -1) {
+            if (str2.charAt(i) == chars.peek()) {
+                chars.pop();
+            }
+            i--;
+        }
+        if (chars.empty())
+            return true;
+        return false;
+    }
+
+
+    private static int[] task2(int[] array, int number) {
+        int left = 0;
+        int right = array.length - 1;
+        while (left < right) {
+            int sum = array[left] + array[right];
+            if (sum == number)
+                return new int[]{array[left], array[right]};
+            if (sum < number)
+                left++;
+            else right--;
+        }
+        return new int[0];
+    }
     private static Map<String, Integer> task1() {
 
         Map<String, Integer> map = new HashMap<>();
 
         for (Person person : Arrays.stream(RAW_DATA)
                 .distinct().toList()) {
-           if(!map.containsKey(person.getName()))
-               map.put(person.getName(), 1);
-           else {
-               int i =  map.get(person.getName());
-               map.put(person.getName(), ++i);
-           }
+            if(!map.containsKey(person.getName()))
+                map.put(person.getName(), 1);
+            else {
+                int i =  map.get(person.getName());
+                map.put(person.getName(), ++i);
+            }
         }
 
         return map.entrySet()
